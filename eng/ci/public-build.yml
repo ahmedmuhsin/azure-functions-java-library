@@ -24,6 +24,16 @@ resources:
     name: 1ESPipelineTemplates/1ESPipelineTemplates
     ref: refs/tags/release
 
+variables:
+  - template: ci/variables/build.yml@eng
+  - template: ci/variables/cfs.yml@eng
+  - name: codeql.language
+    value: java,powershell
+  - name: codeql.buildIdentifier
+    value: java_library_public
+  - name: codeql.excludePathPatterns
+    value: '/extract,/azure-maven-archetypes,/azure-maven-plugins,/azure-functions-java-worker'
+
 extends:
   template: v1/1ES.Unofficial.PipelineTemplate.yml@1es
   parameters:
@@ -34,12 +44,6 @@ extends:
 
     stages:
     - stage: Build
-      templateContext:
-        sdl:
-          codeql:
-            runSourceLanguagesInSourceAnalysis: true
-            buildIdentifier: java_library_public
-            excludePathPatterns: '/extract,/azure-maven-archetypes,/azure-maven-plugins,/azure-functions-java-library'
 
       jobs:
       - template: /eng/ci/templates/jobs/build.yml@self
